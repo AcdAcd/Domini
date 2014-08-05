@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>Domini by RideZeBigOne</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>Domini</h1>
+          <h2>Mon projet domotique DIY-Arduino-Jeenode-Linux/ My Home automation project DIY-Arduino-Jeenode-Linux</h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/RideZeBigOne/Domini/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/RideZeBigOne/Domini/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/RideZeBigOne/Domini" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <h1>
+<a name="domini" class="anchor" href="#domini"><span class="octicon octicon-link"></span></a>Domini</h1>
+
+<p>Mon projet domotique / My Home automation project</p>
+
+<h1>
+<a name="brouillon" class="anchor" href="#brouillon"><span class="octicon octicon-link"></span></a>((BROUILLON))</h1>
+
+<h1>
+<a name="intro" class="anchor" href="#intro"><span class="octicon octicon-link"></span></a>Intro</h1>
+
+<p><img src="/docs/Synoptique_DoMini.png" alt="Domini architecture"></p>
+
+<h1>
+<a name="pr%C3%A9-requis" class="anchor" href="#pr%C3%A9-requis"><span class="octicon octicon-link"></span></a>Pré-requis</h1>
+
+<h2>
+<a name="plateforme" class="anchor" href="#plateforme"><span class="octicon octicon-link"></span></a>Plateforme</h2>
+
+<p>Le serveur de la domotique est une machine Linux. </p>
+
+<p>Le projet ne nécessite que peu de ressources, jusqu'en aout 2014 il tournait sur un <strong>Sheevaplug</strong> :</p>
+
+<ul>
+<li><em>Linux DEBIAN 6 Lenny</em></li>
+<li><em>ARM v5 1.2GHz</em></li>
+<li><em>RAM 512 Mo</em></li>
+<li>
+<em>Flash 512 Mo</em> </li>
+<li><em>Lecteur SDCard (remplacé au bout de 6 mois par un disque dur USB car la SDCard ne supportait pas les nombreuses écritures)</em></li>
+<li><em>1 port USB</em></li>
+<li><em>1 port Ethernet</em></li>
+</ul><p>Le projet Domini ayant atteint une certaine maturité et ayant acquis une place presque indispensable dans la maison (gestion du chauffage, volets et bientôt l'alarme) j'ai voulu fiabilisé le serveur.
+Pour cela, j'ai migré du sheevaplug vers un <strong>PC Barebone</strong> (mon ancien PC recyclé) avec des disques dur montés en RAID1 et avec un peu plus de puissance pour réaliser les tâches (serveur web, sauvegarde base de données,...).</p>
+
+<p>Voici les caractéristiques du PC (à titre d'information, cela n'indique pas le minimum nécessaire)</p>
+
+<ul>
+<li><em>Linux DEBIAN 7</em></li>
+<li><em>PC x86 : Intel P4</em></li>
+<li><em>RAM : 2Go</em></li>
+<li><em>Disque dur : 2 x 80 Go ( montés en RAID1)</em></li>
+<li><em>1 port USB</em></li>
+<li><em>Wifi b/g/n</em></li>
+<li><em>Reseau Ethernet 10/100Mbps (optionnel une fois le wifi installé)</em></li>
+</ul><h1>
+<a name="paquets-et-logiciels" class="anchor" href="#paquets-et-logiciels"><span class="octicon octicon-link"></span></a>Paquets et logiciels</h1>
+
+<p>La liste des paquets installés sur ma machine est disponible sur le dépôt :</p>
+
+<pre><code>~/serveur/systeme/dpkg.txt
+</code></pre>
+
+<p>Dans les grandes lignes voici ce qui est essentiel pour le projet :</p>
+
+<ul>
+<li>Serveur web : lighttpd</li>
+<li>Base de données : MySQL</li>
+<li>PHP</li>
+<li>GD (lib graphique pour HTML)</li>
+<li>serveur FTP : vsftp (pour récupération images des cameras IP)</li>
+<li>GCC (pour compiler les applications faites en C)
+<em>Il existe certainement des dépendances ...</em>
+</li>
+</ul><p>Pour le développement, mise au point ou confort, j'utilise également :</p>
+
+<ul>
+<li>Samba</li>
+<li>Webmin</li>
+<li>Git</li>
+<li>screen</li>
+</ul><h1>
+<a name="notes-pour-linstallation-ou-la-migration-vers-un-nouveau-pc" class="anchor" href="#notes-pour-linstallation-ou-la-migration-vers-un-nouveau-pc"><span class="octicon octicon-link"></span></a>Notes pour l'installation ou la migration vers un nouveau PC</h1>
+
+<h2>
+<a name="base-de-donnees" class="anchor" href="#base-de-donnees"><span class="octicon octicon-link"></span></a>BASE DE DONNEES</h2>
+
+<p>Fichier contenant la structure de la base :</p>
+
+<pre><code>~/serveur/bdd/struct_domotique.sql
+</code></pre>
+
+<p>Fichier contenant l'exportation de toutes les données (non disponible sur le dépot git car du domaine privé)
+L'importation de gros fichiers n'est pas possible via phpmyadmin, il faut utiliser mysql en ligne de commande:</p>
+
+<pre><code>mysql --user=root --password=mysql domotique &lt;   ~/serveur/bdd/backup_domotique/backup-domotique.sql
+</code></pre>
+
+<h2>
+<a name="interface-web" class="anchor" href="#interface-web"><span class="octicon octicon-link"></span></a>INTERFACE WEB</h2>
+
+<p>faire un lien symbolique de ~/serveur/www/domini vers /var/www/domini</p>
+
+<pre><code>ln -s ~/serveur/www/domini /var/www/domini
+</code></pre>
+
+<p><strong>ATTENTION</strong> : il ne faut pas avoir créé /var/www/domini avant de créér le lien symbolique</p>
+
+<p>ajouter le multihost dans lighttp.conf</p>
+
+<pre><code> ### Ajout virtual host Webcam ###
+$SERVER["socket"] == ":82" {
+ server.document-root = "/var/www/webcam/"
+ server.errorlog = "/var/log/lighttpd/webcam/error.log"
+ }
+</code></pre>
+
+<h2>
+<a name="systeme" class="anchor" href="#systeme"><span class="octicon octicon-link"></span></a>SYSTEME</h2>
+
+<h3>
+<a name="crontab" class="anchor" href="#crontab"><span class="octicon octicon-link"></span></a>Crontab:</h3>
+
+<p>Importer les taches CRON listées dans ce fichier :</p>
+
+<pre><code>~/serveur/systeme/crontab.txt
+</code></pre>
+
+<p>Commande à éxécuter :</p>
+
+<pre><code>crontab crontab.txt
+</code></pre>
+
+<h2>
+<a name="logiciel" class="anchor" href="#logiciel"><span class="octicon octicon-link"></span></a>Logiciel</h2>
+
+<p>Recompiler tous les logiciels directement sur la cible avec 'Make'</p>
+        </section>
+
+        <footer>
+          Domini is maintained by <a href="https://github.com/RideZeBigOne">RideZeBigOne</a><br>
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        
+      </div>
+    </div>
+  </body>
+</html>
